@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>BookShoppy</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+    <style>
+   .navbar {
+    position: absolute;
+}
+    .navbar-brand img {
+      height: 20px; /* Set max height for the logo */
+    }
+
+    .navbar-nav.ml-auto .nav-link {
+      margin-right: 10px; /* Adjust spacing between menu items */
+    }
+
+  
+    .dropdown {
+    position: relative;
+    display: inline-block;
+    
+    }
+    .dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    width: fit-content;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 5px 16px;
+    z-index: 1;
+    }
+    .dropdown-item
+    {
+      color: #000000;
+      text-align: left;
+    }
+    .dropdown-menu :hover
+    {
+      background-color:aliceblue;
+    }
+
+  body {
+    font-family: 'Roboto Condensed', sans-serif;
+    background-color: #f5f5f5
+}
+
+.hedding {
+    font-size: 20px;
+    color: #ab8181;
+}
+
+.main-section {
+    position: absolute;
+    left: 50%;
+    right: 50%;
+    transform: translate(-50%, 5%);
+}
+
+.left-side-product-box img {
+    width: 100%;
+}
+
+.left-side-product-box .sub-img img {
+    margin-top: 5px;
+    width: 83px;
+    height: 100px;
+}
+
+.right-side-pro-detail span {
+    font-size: 15px;
+}
+
+.right-side-pro-detail p {
+    font-size: 25px;
+    color: #a1a1a1;
+}
+
+.right-side-pro-detail .price-pro {
+    color: #E45641;
+}
+
+.right-side-pro-detail .tag-section {
+    font-size: 18px;
+    color: #5D4C46;
+}
+
+.pro-box-section .pro-box img {
+    width: 100%;
+    height: 200px;
+}
+      #overlay 
+      {
+        position: absolute;
+        top: 110%;
+        left: -70%;
+        transform: translate(-30%, -93%);
+        width: 250px;
+        height: 250px;
+        display: none;
+      }
+
+
+      #overlay::before 
+      {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        /* Use your image URL */
+        opacity: 0.7; /* Adjust the opacity as needed */
+        border: 1px solid black;
+        z-index: 1; /* Ensure the overlay is above the background image */
+      }
+
+      #overlay img 
+      {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Ensure the image covers the entire container */
+        z-index: 2; /* Ensure the image is above the overlay */
+      }
+      .footer {
+        background-color: #333; /* Dark background color */
+        color: #fff; /* Text color */
+        padding: 20px 0; /* Padding top and bottom */
+        bottom: 0;
+        width: 100%;
+       }
+
+  .footer p {
+    margin-bottom: 0; /* Remove default margin */
+  }
+  @media (max-width: 767px) {
+      body {
+        padding-top: 70px; /* Adjusted padding for fixed-top navbar on smaller screens */
+      }
+
+      .navbar-brand img {
+        max-height: 30px; /* Adjust logo size for smaller screens */
+      }
+
+      .navbar-nav.ml-auto .nav-link {
+        margin-right: 0; /* Reset margin for better spacing */
+      }
+      .footer {
+      text-align: center;
+    }
+    .pro-box-section .pro-box img {
+        height: auto;
+    }
+}
+    </style>
+</head>
+
+<body>
+
+   <!-- Navbar -->
+   <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
+    <div class="container" id="myNavbar">
+      <a class="navbar-brand" href="#"><img src="/images/Logo.png" alt="BookShoppy Logo"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item active"><a class="nav-link" href="/home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/bookview">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Deals</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Stores</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+          <% if (locals.user) { %>
+            <div class="dropdown">
+              <i class="fas fa-user" style="color: aliceblue;"></i> &nbsp;
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-expanded="false">
+                <%= user %>
+              </button>
+              
+              <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+               
+                <li><a class="dropdown-item" href="/profile"><i class="fa fa-user"></i>&nbsp;My Profile</a></li>
+                <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt"></i>&nbsp; Sign Out</a></li>
+              </ul>
+            </div>
+          <% } 
+          else{ %>
+            <li class="nav-item"><a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i> Sign In</a></li>
+          <% } %>
+          <li class="nav-item"><a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+        </ul>
+        
+      </div>
+    </div>
+  </nav>
+  <!-- Navbar End -->
+  
+  <!--BreadScramp-->
+  <p id="breadcrumbs" style="color: #E45641; margin-top: 60px; margin-left: 200px;"> </p>
+  <!--BreadScramp-->
+
+  <div class="container mt-5" style="margin-top:10px; ">
+    <div class="row">
+      <% bookViews.forEach((book, index) => { %>
+     
+        <div class="col-md-3 ml-5 mt-5 mb-4">
+          <!-- Side Column for Carousel -->
+          <div class="card" style="margin-top:10px; ">
+            <!-- <div class="card-header" >
+              <h3 class="card-title">Book Images</h3>
+            </div> -->
+            <div class="card-body" style="height:fit-content; ">
+              <div id="carouselExampleIndicators_<%= index %>" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                  <% book.images.forEach((image, index) => { %>
+                    <div class="carousel-item <%= index === 0 ? 'active' : '' %>" style="background-color: rgb(255, 255, 255);">
+                      <img class="d-block ml-2" onmousemove="zoomIn(id)"
+                        onmouseout="zoomOut()" src="data:image/<%= image.contentType %>;base64, <%= image.data.toString('base64') %>"
+                        alt="Product Image" style="height: 250px; width: 200px;" id="imgZoom_<%= index %>">
+                    </div>
+                  <% }); %>
+                </div>
+              </div>
+            </div>
+            <div id="overlay" onmousemove="zoomIn(id)"></div>
+          </div>
+        </div>
+  
+        <div class="col-lg-8" style="margin-top: 5px;">
+          <div class="right-side-pro-detail border p-3 m-0" style="height: fit-content">
+              <div class="row">
+                  <div class="col-lg-12">
+                      <strong><span><%= book.genres && book.genres.category ?book.genres.category : 'N/A' %></span></strong>
+                      <strong><p class="m-0 p-0"><%= book.bookName %></p></strong>
+                      
+                  </div>
+                  <div class="col-lg-12">
+                      <p class="m-0 p-0 price-pro">₹<%= book.price %></p>
+                      <hr class="p-0 m-0">
+                  </div>
+                  <div class="col-lg-12 pt-2">
+                      <h5>Book Detail</h5>
+                      <span><%= book.bookDetail %></span>
+                      <hr class="m-0 pt-2 mt-2">
+                  </div>
+                  <div class="col-lg-12">
+                      <p class="tag-section"><strong>Writer : </strong><a href=""><%= book.author %> <%= book.stock %></a></p>
+                  </div>
+                <form action="/addtocart/<%= book._id %>" method="post">
+                  <div class="col-lg-4">
+                    <h6>Stock :</h6>
+                    <input type="text" id="stock" name="quantity" class="form-control text-center w-100" value="<%= book.stock %>" disabled>
+                    <br>
+                    <h6>Quantity :</h6>
+                    <input type="number" id="quantityInput" name="quantityInput" class="form-control text-center w-100" oninput="validateQuantity(this)">
+                   
+                   
+                    <span id="quantityInputErrorMessage" style="color: red;"></span>
+                  </div>
+                  
+                  <div class="col-lg-12 mt-3">
+                    <div class="row">
+                      <div class="col-lg-4 pb-2 text-center">
+                        <button class="btn btn-danger w-100 " type="submit">Add To Cart</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+          </div>
+        </div>
+   
+      <% }); %>
+    </div>
+  </div>
+  <div>
+    
+    
+    <script>
+      function configureBredcrumbs() {
+       
+        let path = location.href.split('/').slice(3);
+        
+        const linkPaths = [{ "main": 'eBooks', "link": '/' }];
+        
+        for (let i = 0; i < path.length; i++) {
+          const component = path[i];
+          
+          const anchorText = decodeURIComponent(component).toUpperCase().split('.')[0];
+          
+          const link = '/' + path.slice(0, i + 1).join('/');
+          
+          linkPaths.push({ "main": anchorText, "link": link });
+        }
+        
+        let values = linkPaths.map((part) => {
+          return '<a href="' + part.link + '">' + part.main + "</a>"
+        }).join('<span style="margin: 5px">/</span>')
+  
+        let element = document.getElementById("breadcrumbs");
+        element.innerHTML = values;
+      }
+      configureBredcrumbs();
+    </script>
+  </div>
+ 
+  
+   <!-- Existing footer... -->
+<footer class="footer fixed-bottom py-3 bg-dark text-white" style="margin-top: 10px;">
+  <div class="container text-center">
+    <p>Online Store Copyright</p>  
+  </div>
+</footer>
+<script>
+  // Reset the value of the text field when the page loads
+  window.onload = function() {
+      document.getElementById('quantityInput').value = '';
+  };
+</script>
+<script>
+  function validateQuantity(input) {
+      var maxQuantity = 2;
+      var quantity = parseInt(input.value);
+      var stock = parseInt(document.getElementById("stock").value);
+      var enteredQuantity = input.value;
+
+      var errorMessage = document.getElementById("quantityInputErrorMessage");
+
+      // Ensure the entered quantity is a valid number
+      if (isNaN(enteredQuantity) || enteredQuantity==0 ) {
+          errorMessage.innerText = "Please enter a valid number.";
+          input.value = ""; // Clear the input field
+          return;
+      }
+
+      // Check if the quantity exceeds the stock or the maximum allowed
+      if (quantity > stock || quantity > maxQuantity) {
+          errorMessage.style.display = "block";
+          input.setCustomValidity("Out of stock or maximum 2 order allowed");
+      } else {
+          errorMessage.style.display = "none";
+          input.setCustomValidity("");
+      }
+  }
+</script>
+
+
+
+    <script>
+  
+      function zoomIn(id) 
+      {
+        var element = document.getElementById("overlay");
+        element.style.display = "inline-block";
+        
+        var img = document.getElementById(id);
+
+        // Calculate the percentage of mouse position within the image
+        var percentX = (event.offsetX / img.width) * 100;
+        var percentY = (event.offsetY / img.height) * 100;
+
+        // Set background position to display the zoomed area
+        element.style.backgroundImage = "url('" + img.src + "')";
+        element.style.backgroundSize = img.width * 4 + "px " + img.height * 4 + "px";
+        element.style.backgroundPosition = percentX + "% " + percentY + "%";
+    }
+
+  function zoomOut() {
+    var element = document.getElementById("overlay");
+    element.style.display = "none";
+  }
+</script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+
+</body>
+</html>

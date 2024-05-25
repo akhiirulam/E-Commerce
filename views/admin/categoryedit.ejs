@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+  <style>
+    /* Optional: Add your custom styles here */
+    body {
+      padding-top: 56px;
+      margin-bottom: 60px; /* Adjusted for fixed navbar */
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 56px; /* Height of the fixed navbar */
+      bottom: 0;
+      left: 0;
+      z-index: 1000;
+      padding-top: 30px;
+      padding-left: 15px;
+      padding-right: 15px;
+      background-color: #343a40;
+      color: #fff;
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #343a40;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .main-content {
+      margin-left: 250px;
+      padding: 20px;
+    }
+    table {
+    width: 50%;
+    margin: 20px auto;
+  }
+
+  th,
+  td {
+    padding: 10px;
+    text-align: center;
+  }
+
+  input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+
+  button {
+    background-color: #5bc0de;
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #46b8da;
+  }
+
+  .ul-class ul
+    {
+      list-style: none;
+    } 
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      .main-content {
+        margin-left: 0;
+      }
+
+      .sidebar {
+        position: fixed;
+        top: 56px;
+        bottom: 0;
+        left: -250px; /* Hide the sidebar by default on smaller screens */
+        z-index: 1000;
+        padding-top: 150px;
+        padding-left: 15px;
+        padding-right: 15px;
+        background-color: #343a40;
+        color: #fff;
+        transition: left 0.3s ease; /* Add smooth transition effect */
+      }
+     
+      .sidebar.show {
+        left: 0; /* Show the sidebar when the "show" class is added */
+      }
+
+      .navbar-toggler {
+        display: block;
+      }
+      table {
+        overflow-x: auto;
+      }
+    }
+  </style>
+  <script>
+    // JavaScript to toggle the "show" class on the sidebar
+    document.addEventListener("DOMContentLoaded", function () {
+      var toggleButton = document.getElementById("sidebarToggle");
+      var sidebar = document.querySelector(".sidebar");
+  
+      toggleButton.addEventListener("click", function () {
+        sidebar.classList.toggle("show");
+      });
+    });
+  </script>
+  <title>Admin Dashboard</title>
+</head>
+<body>
+
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand" href="#">Admin Dashboard</a>
+
+      <button id="sidebarToggle" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav ml-auto">
+          <% if (locals.user) { %>
+            <li class="nav-item">
+              <a class="nav-link" href="/adminlogout">
+                <i class="fas fa-sign-out-alt"></i> Sign Out
+              </a>
+            </li>
+            <li class="nav-item">
+              <span class="nav-link">
+                <i class="fas fa-user"></i>
+                <%= user %>
+              </span>
+            </li>
+          <% } else { %>
+            <li class="nav-item">
+              <a class="nav-link" href="/adminlogin">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+              </a>
+            </li>
+          <% } %>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  
+  <div class="sidebar">
+    <h5>Menu</h5>
+    <ul class="ul-class nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link" href="/admindashboard">
+          <i class="fas fa-home"></i> Home
+        </a>
+      </li>
+  
+      <li class="nav-item">
+        <a class="nav-link" href="/userslist">
+          <i class="fas fa-user"></i> Users
+        </a>
+      </li>
+  
+      <li class="nav-item">
+        <a class="nav-link" href="/productlist">
+          <i class="fas fa-box"></i> Product
+        </a>
+      </li>
+  
+      <li class="nav-item">
+        <a class="nav-link" href="/categorylist">
+          <i class="fas fa-tags"></i> Category
+        </a>
+      </li>
+  
+      <li class="nav-item">
+        <a class="nav-link" href="#">
+          <i class="fas fa-tags"></i> Order
+        </a>
+  
+        <!-- Nested CanceledOrder Link -->
+        <ul>
+          <li class="nav-item">
+            <a class="nav-link" href="/placedOrder">
+              <i class="fas fa-tags"></i> placedOrder
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/canceledOrder">
+              <i class="fas fa-tags"></i> CanceledOrder
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/returenedOrder">
+              <i class="fas fa-tags"></i> ReturnedOrder
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/couponList">
+          <i class="fas fa-tags"></i> Coupon
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <main>
+    
+    <div class="d-flex justify-content-center align-items-center">
+      <div class="table-responsive" style="width: 500px">
+          <table class="table table-bordered">
+              <thead>
+                <form action="/updatecategory/<%= categoryData._id %>" method="post" onsubmit="return validateForm()">
+                <tr>
+                    <td>
+                        <input type="text" id="category" name="category" value="<%= categoryData.category %>" >
+                        <% if (locals.Message) { %>
+                          <div>
+                              <span style="color: red;"><%= Message %></span>
+                          </div>
+                        <% } %> 
+                        <span id="CategoryErrorMessage" style="color: red;"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="submit" id="editButton" class="btn btn-info " title="Submit" data-toggle="tooltip">Add New Category
+                    </td>
+                </tr>
+            </form>
+          </thead>
+          
+        </table>
+      </div>
+    </div>
+  </main>
+
+
+    <footer class="footer">
+        <div class="container">
+          <p>&copy; 2023 Your Company. All rights reserved.</p>
+        </div>
+      </footer>
+      <script>
+        function validateForm() {
+            var categoryInput = document.getElementById('category').value.trim();
+            if (categoryInput === '') {
+              document.getElementById("CategoryErrorMessage").innerHTML='Please enter the field.'
+                return false;
+            }
+            return true;
+        }
+    </script>
+     
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        
+    </body>
+    </html>
+    

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+  <style>
+    /* Optional: Add your custom styles here */
+    body {
+      padding-top: 56px;
+      margin-bottom: 60px; /* Adjusted for fixed navbar */
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 56px; /* Height of the fixed navbar */
+      bottom: 0;
+      left: 0;
+      z-index: 1000;
+      padding-top: 30px;
+      padding-left: 15px;
+      padding-right: 15px;
+      background-color: #343a40;
+      color: #fff;
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #343a40;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .main-content {
+      margin-left: 250px;
+      padding: 20px;
+    }
+    table {
+      width: 100%;
+      margin-bottom: 1rem;
+      color: #343a40;
+    }
+    .ul-class ul
+    {
+      list-style: none;
+    } 
+    table th,
+    table td {
+      padding: 0.75rem;
+      vertical-align: top;
+      border-top: 1px solid #dee2e6;
+      text-align: left;
+    }
+
+    th {
+      background-color: #343a40;
+      color: #fff;
+    }
+
+    tbody tr:nth-child(odd) {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      .main-content {
+        margin-left: 0;
+      }
+
+      .sidebar {
+        position: fixed;
+        top: 56px;
+        bottom: 0;
+        left: -250px; /* Hide the sidebar by default on smaller screens */
+        z-index: 1000;
+        padding-top: 150px;
+        padding-left: 15px;
+        padding-right: 15px;
+        background-color: #343a40;
+        color: #fff;
+        transition: left 0.3s ease; /* Add smooth transition effect */
+      }
+
+      .sidebar.show {
+        left: 0; /* Show the sidebar when the "show" class is added */
+      }
+
+      .navbar-toggler {
+        display: block;
+      }
+      table {
+        overflow-x: auto;
+      }
+    }
+  </style>
+  <script>
+    // JavaScript to toggle the "show" class on the sidebar
+    document.addEventListener("DOMContentLoaded", function () {
+      var toggleButton = document.getElementById("sidebarToggle");
+      var sidebar = document.querySelector(".sidebar");
+  
+      toggleButton.addEventListener("click", function () {
+        sidebar.classList.toggle("show");
+      });
+    });
+  </script>
+  <title>Admin Dashboard</title>
+</head>
+<body>
+
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand" href="#">Admin Dashboard</a>
+
+      <button id="sidebarToggle" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav ml-auto">
+          <% if (locals.user) { %>
+            <li class="nav-item">
+              <a class="nav-link" href="/adminlogout">
+                <i class="fas fa-sign-out-alt"></i> Sign Out
+              </a>
+            </li>
+            <li class="nav-item">
+              <span class="nav-link">
+                <i class="fas fa-user"></i>
+                <%= user %>
+              </span>
+            </li>
+          <% } else { %>
+            <li class="nav-item">
+              <a class="nav-link" href="/adminlogin">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+              </a>
+            </li>
+          <% } %>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  
+  <div class="sidebar">
+    <h5>Menu</h5>
+    <ul class="ul-class nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link" href="/admindashboard">
+          <i class="fas fa-home"></i> Home
+        </a>
+      </li>
+  
+      <li class="nav-item">
+        <a class="nav-link" href="/userslist">
+          <i class="fas fa-user"></i> Users
+        </a>
+      </li>
+  
+      <li class="nav-item">
+        <a class="nav-link" href="/productlist">
+          <i class="fas fa-box"></i> Product
+        </a>
+      </li>
+  
+      <li class="nav-item">
+        <a class="nav-link" href="/categorylist">
+          <i class="fas fa-tags"></i> Category
+        </a>
+      </li>
+  
+      <li class="nav-item">
+        <a class="nav-link" href="/orderList">
+          <i class="fas fa-tags"></i> Order
+        </a>
+  
+        <!-- Nested CanceledOrder Link -->
+        <ul>
+          <li class="nav-item">
+            <a class="nav-link" href="/placedOrder">
+              <i class="fas fa-tags"></i> placedOrder
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/canceledOrder">
+              <i class="fas fa-tags"></i> CanceledOrder
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/returenedOrder">
+              <i class="fas fa-tags"></i> ReturnedOrder
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/couponList">
+          <i class="fas fa-tags"></i> Coupon
+        </a>
+      </li>
+    </ul>
+  </div>
+
+
+<% console.log("hello: ", productData[0].orders[0].orderStatus) %>
+<div class="main-content">
+  <div class="table-responsive">
+    <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Price per Unit</th>
+                        <th>Total Price</th>
+                        <th>Address</th>
+                        <th>Order Status</th>
+                         <!-- Add a new column for the Remove button -->
+                    </tr>
+                </thead>
+                <tbody>
+                  <% productData.forEach(cartItem => { %>
+                    <% cartItem.orders.forEach(product => { %>
+                      <% if(product.orderStatus==3) { %> 
+                        <tr>
+                            <td><%= product.bookName %></td>
+                            <td><%= product.quantity %></td>
+                            <td><%= product.price %></td>
+                            <td><%= (product.price * product.quantity).toFixed(2) %></td>
+                            <td><%= cartItem.name %>, <%= cartItem.address %>, <%= cartItem.mobileNumber %> / <%= cartItem.alternatephone %> <%= cartItem.email %></td>
+                            <td>                                
+                                 Returned
+                            </td>
+                        </tr>
+                        <% } %>  
+                    <% }); %>
+                <% }); %>
+                
+                </tbody>
+            </table>
+        </div>
+        <div class="row">
+      
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Existing footer... -->
+  <!-- Footer -->
+  <footer class="text-center fixed-bottom py-2 bg-dark text-white">
+    <div class="container text-center">
+      <p>Online Store Copyright</p>  
+    </div>
+  </footer>
+  <!-- End Footer -->
+  
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html> 

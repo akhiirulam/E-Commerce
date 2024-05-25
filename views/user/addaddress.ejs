@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>BookShoppy</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+  <style>
+    /* Custom Styles */
+    body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+    .navbar {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+    
+    .navbar-brand img {
+      height: 20px; /* Set max height for the logo */
+    }
+
+    .navbar-nav.ml-auto .nav-link {
+      margin-right: 10px; /* Adjust spacing between menu items */
+    }
+
+  
+    .dropdown {
+    position: relative;
+    display: inline-block;
+    
+    }
+    .dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    width: fit-content;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 5px 16px;
+    z-index: 1;
+    }
+    .dropdown-menu :hover
+    {
+      background-color:aliceblue;
+    }
+
+    .content {
+            margin-left: 200px; /* Adjust based on your sidebar width */
+            padding: 16px;
+        }
+     
+    .sidebar {
+            width: 250px;
+            background-color: #ffffff;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            padding-top: 60px; /* Adjust based on your navbar height */
+        }
+    .sidebar h5
+    {
+         padding: 4px 16px;
+         color: #0074f8;
+         text-align: center;
+    }
+    .sidebar ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+    .sidebar hr {
+      border: 1px solid #d7d4d4; /* Set the color of the line */
+      margin: 6px 0;
+    }
+
+    .sidebar li a {
+      padding: 8px 16px;
+      text-decoration: none;
+      font-size: 18px;
+      color: #818181;
+      display: block;
+     
+      text-align: center;
+    }
+
+    .sidebar li a:hover {
+      color: #000000;
+    }
+
+
+    form {
+      max-width: 700px;
+      margin: 0 auto;
+      margin-top: 95px;
+      margin-bottom: 95px;
+      display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .form-group {
+            width: 48%; /* Adjust as needed */
+            margin-bottom: 15px;
+        }
+    textarea
+    {
+        max-width: 400px;
+    }
+    label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        .submit {
+            background-color: #45a049;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .submit:hover {
+            background-color: #2e7d32;
+        }
+
+    .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+  .footer p {
+    margin-bottom: 0; /* Remove default margin */
+  }
+
+    /* Responsive Styles */
+    @media (max-width: 767px) {
+      body {
+        padding-top: 70px; /* Adjusted padding for fixed-top navbar on smaller screens */
+      }
+
+      .navbar-brand img {
+        max-height: 30px; /* Adjust logo size for smaller screens */
+      }
+
+      .navbar-nav.ml-auto .nav-link {
+        margin-right: 0; /* Reset margin for better spacing */
+      }
+
+    
+
+      .footer {
+      text-align: center;
+    }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
+    <div class="container" id="myNavbar">
+      <a class="navbar-brand" href="#"><img src="/images/Logo.png" alt="BookShoppy Logo"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item active"><a class="nav-link" href="/home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/bookview">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Deals</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Stores</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+          <% if (locals.user) { %>
+            <div class="dropdown">
+              <i class="fas fa-user" style="color: aliceblue;"></i> &nbsp;
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-expanded="false">
+                <%= user %>
+              </button>
+              
+              <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="/profile"><i class="bi bi-person"></i>&nbsp;My Profile</a></li>
+                <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt"></i>&nbsp; Sign Out</a></li>
+              </ul>
+            </div>
+          <% } 
+          else{ %>
+            <li class="nav-item"><a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i> Sign In</a></li>
+          <% } %>
+          <li class="nav-item"><a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+        </ul>
+        
+      </div>
+    </div>
+  </nav>
+  <!-- <script>
+    $(document).ready(function(){
+      $('.dropdown-toggle').dropdown();
+    });
+  </script> -->
+  <!--Side Bar-->
+  <div class="sidebar shadow">
+    <br>
+    <a href="/cart"><h5>MY ORDERS </h5></a>
+    <hr>
+    <a href="/profile"><h5>ACCOUNT SETTINGS </h5></a>
+    <ul>
+        <li><a href="#">Profile Information</a></li>
+        <li><a href="#">Manage Addresses</a></li>
+      </ul>
+  </div>
+  <!--Side Bar End-->
+
+  <%= console.log("user details:", userDetails); %>
+  <div class="content">
+    <form action="/submitAddress" method="POST"  onsubmit="return validateForm()">
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" value="<%= userDetails[0].email %>" readonly>
+        </div>
+    
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <%= console.log("user name:", userDetails[0].name); %>
+            <input type="text" id="name" name="name" value="<%= userDetails[0].name %>" readonly>
+            <span id="formNameErrorMessage" style="color: red;"></span>
+        </div>
+    
+        <div class="form-group">
+            <label for="mobileNumber">Mobile Number:</label>
+            <input type="tel" id="mobileNumber" name="mobileNumber" value="<%= userDetails[0].mobileNumber %>" readonly>
+            <span id="formMobileErrorMessage" style="color: red;"></span>
+        </div>
+    
+        <div class="form-group">
+            <label for="pincode">Pincode:</label>
+            <input type="number" id="pincode" name="pincode">
+            <span id="formPincodeErrorMessage" style="color: red;"></span>
+        </div>
+    
+        <div class="form-group">
+            <label for="locality">Locality:</label>
+            <input type="text" id="locality" name="locality">
+            <span id="formLocalityErrorMessage" style="color: red;"></span>
+        </div>
+    
+        <div class="form-group">
+            <label for="address">Address:</label>
+            <textarea id="address" name="address"></textarea>
+            <span id="formAddressErrorMessage" style="color: red;"></span>
+        </div>
+    
+        <div class="form-group">
+            <label for="district">District:</label>
+            <input type="text" id="district" name="district">
+            <span id="formDistrictErrorMessage" style="color: red;"></span>
+        </div>
+    
+        <div class="form-group">
+            <label for="state">State:</label>
+            <input type="text" id="state" name="state">
+            <span id="formStateErrorMessage" style="color: red;"></span>
+        </div>
+    
+        <div class="form-group">
+            <label for="landmark">Landmark:</label>
+            <input type="text" id="landmark" name="landmark">
+            <span id="formLandmarkErrorMessage" style="color: red;"></span>
+        </div>
+    
+        <div class="form-group">
+            <label for="alternatephone">Alternate Phone:</label>
+            <input type="tel" id="alternatephone" name="alternatephone">
+            <span id="formAlternateErrorMessage" style="color: red;"></span>
+        </div>
+        <label style="margin-right: 10px;">Address Type:</label>
+        <div class="form-group">
+            
+        
+            <div style="display: flex;">
+                <input type="radio" id="home" name="addresstype" value="home">&nbsp;
+                <label for="home">Home</label>&nbsp;
+        
+                <input type="radio" id="work" name="addresstype" value="work" >&nbsp;
+                <label for="work">Work</label>&nbsp;
+               
+            </div>
+            <span id="formAddressTypeErrorMessage" style="color: red;"></span>
+        </div>
+        
+    
+        <input type="submit" class="submit" value="Submit">
+    </form>
+    
+</div>
+  <!-- Existing footer... -->
+  <!-- Footer -->
+  <footer class="text-center fixed-bottom py-2 bg-dark text-white">
+    <div class="container text-center">
+      <p>Online Store Copyright</p>  
+    </div>
+  </footer>
+  <!-- End Footer -->
+
+  <script>
+        function validateForm() {
+        
+        var pincode = document.getElementById('pincode').value;
+        var locality = document.getElementById('locality').value;
+        var address = document.getElementById('address').value;
+        var district = document.getElementById('district').value;
+        var state = document.getElementById('state').value;
+        var landmark = document.getElementById('landmark').value;
+        var alternatephone = document.getElementById('alternatephone').value;
+        var homeAddress = document.getElementById('home');
+        var workAddress = document.getElementById('work');
+        var status = true;
+
+        
+    var pincodeRegex = /^\d{6}$/;
+    if (pincode === "" || !pincodeRegex.test(pincode)) {
+        document.getElementById('formPincodeErrorMessage').innerText = 'Please enter a valid 6-digit pincode.';
+        status = false;
+    } else {
+        document.getElementById('formPincodeErrorMessage').innerText = '';
+    }
+
+    if (locality === "") {
+    document.getElementById('formLocalityErrorMessage').innerText = 'Please enter a locality.';
+    status = false;  // Set to false if the condition is not met
+} else {
+    document.getElementById('formLocalityErrorMessage').innerText = '';  // Clear error message
+}
+
+if (address === "") {
+    document.getElementById('formAddressErrorMessage').innerText = 'Please enter address.';
+    status = false;
+} else {
+    document.getElementById('formAddressErrorMessage').innerText = '';
+}
+
+if (district === "") {
+    document.getElementById('formDistrictErrorMessage').innerText = 'Please enter a district.';
+    status = false;
+} else {
+    document.getElementById('formDistrictErrorMessage').innerText = '';
+}
+
+if (state === "") {
+    document.getElementById('formStateErrorMessage').innerText = 'Please enter a state.';
+    status = false;
+} else {
+    document.getElementById('formStateErrorMessage').innerText = '';
+}
+
+if (landmark === "") {
+    document.getElementById('formLandmarkErrorMessage').innerText = 'Please enter a landmark.';
+    status = false;
+} else {
+    document.getElementById('formLandmarkErrorMessage').innerText = '';
+}
+
+if (alternatephone === "") {
+    document.getElementById('formAlternateErrorMessage').innerText = 'Please enter an alternate mobile number.';
+    status = false;
+} else {
+    document.getElementById('formAlternateErrorMessage').innerText = '';
+}
+
+    if (!(homeAddress.checked || workAddress.checked)) {
+        document.getElementById('formAddressTypeErrorMessage').innerText = 'Please select an address type.';
+        status = false;
+    } else {
+        document.getElementById('formAddressTypeErrorMessage').innerText = '';
+    }
+    return status; // Allow the form submission if all validations pass
+  }
+</script>
+
+
+  
+   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

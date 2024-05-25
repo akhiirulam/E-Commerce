@@ -1,0 +1,105 @@
+const express = require('express');
+const router = express.Router();
+const multer = require('multer');
+
+const adminController = require('../controllers/adminController');
+const productContoller = require('../controllers/productContoller');
+const categoryController = require('../controllers/categoryController');
+const adminOrderControl = require('../controllers/adminOrderController');
+const adminCouponController = require('../controllers/adminCouponController');
+const adminSalesController = require('../controllers/adminSalesController');
+const adminAuthController = require('../controllers/adminAuthController')
+
+
+//===========================================================//
+//ADMIN LOGIN MODULES
+//===========================================================//
+
+router.get('/adminlogin', (req, res) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+
+  if (req.session.adminloggedIn) {
+    res.redirect('adminDashboard');
+  }
+  else {
+    res.render('adminlogin');
+  }
+});
+router.post('/adminlogin', adminAuthController.adminlogin);
+router.get('/adminDashboard', adminAuthController.auth, adminController.adminDashboard)
+
+
+//===========================================================//
+//ADMIN USER MANAGEMENT MODULES
+//===========================================================//
+router.get('/userslist', adminAuthController.auth, adminController.userlist);
+router.get('/userblock/:_id', adminAuthController.auth, adminController.blockuser);
+router.get('/userunblock/:_id', adminAuthController.auth, adminController.unblockuser);
+
+//===========================================================//
+//ADMIN PRODUCT MANAGEMENT MODULES
+//===========================================================//
+
+router.get('/productlist', adminAuthController.auth, productContoller.productlist);
+router.get('/addproduct', adminAuthController.auth, productContoller.addproduct)
+var storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads');
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix);
+  }
+});
+
+var upload = multer({ storage: storage });
+router.post('/productadd', upload.array('image', 3), adminAuthController.auth, productContoller.productadd);
+router.get('/productedit/:_id', adminAuthController.auth, productContoller.productedit);
+router.post('/updateproduct/:_id', upload.array('image', 3), adminAuthController.auth, productContoller.updateproduct);
+router.post('/productdelete/:_id', adminAuthController.auth, productContoller.deleteproduct);
+router.post('/imageDelete/:_id', adminAuthController.auth, productContoller.imageDelete);
+
+//===========================================================//
+//ADMIN CATEGORY MANAGEMENT MODULES
+//===========================================================//
+
+router.get('/categorylist', adminAuthController.auth, categoryController.categorylist);
+router.get('/addcategory', adminAuthController.auth, categoryController.addcategory);
+router.post('/categoryadd', adminAuthController.auth, categoryController.categoryadd);
+router.get('/categoryedit/:_id', adminAuthController.auth, categoryController.categoryedit);
+router.post('/updatecategory/:_id', adminAuthController.auth, categoryController.updatecategory)
+router.post('/categorydelete/:_id', adminAuthController.auth, categoryController.deletecategory)
+
+//===========================================================//
+//ADMIN ORDER MANAGEMENT MODULES
+//===========================================================//
+
+router.get('/orderList', adminAuthController.auth, adminOrderControl.orderList)
+router.get('/placedOrder', adminAuthController.auth, adminOrderControl.placedOrder)
+router.get('/canceledOrder', adminAuthController.auth, adminOrderControl.canceledOrder);
+router.get('/returenedOrder', adminAuthController.auth, adminOrderControl.returenedOrder);
+router.get('/deliveredItem/:_id', adminAuthController.auth, adminOrderControl.deliveredItem)
+
+//===========================================================//
+//COUPON MODULES
+//===========================================================//
+
+router.get('/couponList', adminAuthController.auth, adminCouponController.couponList)
+router.get('/addCoupon', adminAuthController.auth, adminCouponController.addCoupon)
+router.post('/couponCreate', adminAuthController.auth, adminCouponController.couponCreate)
+router.get('/couponEdit/:_id', adminAuthController.auth, adminCouponController.couponEdit)
+router.post('/couponUpdate/:_id', adminAuthController.auth, adminCouponController.couponUpdate)
+router.post('/coupondelete/:_id', adminAuthController.auth, adminCouponController.coupondelete)
+
+//===========================================================//
+//SALES MODULE
+//===========================================================//
+
+router.post('/salesDownloadXl', adminAuthController.auth, adminSalesController.salesDownloadXl)
+router.post('/salesGenerate', adminAuthController.auth, adminSalesController.salesGenerate)
+router.post('/salesDownload', adminAuthController.auth, adminSalesController.salesDownloadPDF)
+router.get('/adminlogout', (adminController, productContoller, categoryController).adminlogout);
+
+
+
+module.exports = router;

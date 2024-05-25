@@ -1,0 +1,215 @@
+const express = require('express');
+const router = express.Router();
+
+const userController = require('../controllers/userController');
+const forgetController = require('../controllers/forgetController');
+const profileController = require ('../controllers/profileController');
+const addressController= require('../controllers/adderssController');
+const bookController = require('../controllers/bookController');
+const authController = require ('../controllers/authController');
+const cartController = require ('../controllers/cartController');
+const resetPasswordController = require ('../controllers/resetPasswordController');
+const paymentController = require('../controllers/paymentController');
+const couponController = require('../controllers/couponController');
+const walletController = require('../controllers/walletController');
+
+const {User,Product} = require('../models/dbconnection');
+
+
+//=============================================================================//
+
+//USER SIDE
+
+router.get('/', async (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  const newproductData = await Product.find({});
+  const totalCount = newproductData.length;
+  let latestDate = newproductData[0].publishedDate;
+  let latestProduct;
+
+  const dateArray = [];
+  for (let i = 0; i < totalCount; i++) {
+      dateArray.push(newproductData[i].publishedDate);
+  }
+  const dates = dateArray.map(dateString => new Date(dateString));
+  latestDate = new Date(Math.max(...dates));
+
+  for (let i = 0; i < totalCount; i++) {
+      if (new Date(newproductData[i].publishedDate).getTime() === latestDate.getTime()) {
+          latestProduct = newproductData[i];
+          break; // Stop looping once the latest product is found
+      }
+  }
+
+  res.render('home', { productData: latestProduct, latestDate });
+});
+
+//LOGIN
+router.get('/login', (req, res) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  if (req.session.loggedIn) {
+      res.redirect('/home');
+  } else {
+      res.render('user/login');
+  }
+});
+
+//user side
+
+router.post('/login', authController.login);
+
+router.get('/signup', (req, res) => {
+  // Render signup page
+  res.render('user/signup');
+});
+
+router.post('/signup', userController.signup);
+
+router.post('/resend', userController.resend);
+
+router.post('/verify', userController.verify);
+
+//SHOP
+router.post('/shippingAddress/:_id', authController.auth, userController.shippingAddress);
+router.get('/shippingAddress/:_id', authController.auth, userController.shippingAddress);
+
+router.get('/myOrder',authController.auth,userController.myOrder);
+// ORDER SUMMARY
+router.get('/ordersummary', authController.auth,userController.ordersummary);
+
+router.get('/codPaymentInit', authController.auth,userController.codPaymentInit);
+
+//PAYMENT
+router.get('/codPayment', authController.auth,userController.codPayment);
+router.get('/razorPayment',authController.auth, paymentController.razorPayment )
+router.post('/razorpayConfirm',authController.auth, paymentController.razorpayConfirm )
+
+//HOME
+router.get('/home', userController.home);
+
+//LOGOUT
+router.get('/logout', userController.logout);
+
+
+
+//===========================================================//
+//BOOK MODULES
+//===========================================================//
+
+router.get('/bookview', authController.auth,bookController.bookview);
+
+//sorting
+
+router.get('/yearWise',authController.auth,bookController.yearWise)
+
+router.get('/priceWise',authController.auth,bookController.priceWise)
+
+router.get('/highPriceWise', authController.auth,bookController.highPriceWise)
+
+//Filtering
+
+router.get('/poemOnly', authController.auth, bookController.poemOnly);
+
+router.get('/storyOnly',authController.auth, bookController.storyOnly)
+
+router.get('/price100to500', authController.auth,bookController.price100to500)
+
+//Search
+router.post('/bookSearch', authController.auth,bookController.bookSearch);
+
+
+router.get('/bookview/:name',authController.auth,bookController.bookdetails)
+
+//===========================================================//
+//FORGET PASSWORD MODULES
+//===========================================================//
+
+router.get('/forget', forgetController.forget)
+
+router.post('/forget', forgetController.forgetVerify);
+
+router.get('/forget-password',forgetController.forgetPasswordLoad);
+
+router.post('/forget-password',forgetController.resetPassword);
+
+//===========================================================//
+//RESET PASSWORD MODULES
+//===========================================================//
+
+router.get('/resetPassword',authController.auth,resetPasswordController.resetPassword)
+router.post('/resetPassword',authController.auth,resetPasswordController.newPassword)
+
+//==========================================================//
+//ADDRESS MODULE
+//===========================================================//
+
+//address view
+router.get('/address',authController.auth,addressController.address);
+
+//add address
+router.get('/addaddress',authController.auth,addressController.addaddress);
+
+//submit address
+router.post('/submitAddress',authController.auth,addressController.submitAddress);
+
+//edit address
+router.get('/addressEdit/:_id', authController.auth,addressController.addressEdit);
+
+//update address
+router.post('/updateAddress/:_id',authController.auth,addressController.updateAddress);
+
+//delete address
+router.post('/addressDelete/:_id', authController.auth,addressController.addressDelete);
+
+//primary address
+router.post('/primaryAddress/:_id', authController.auth,addressController.primaryAddress);
+
+//==========================================================//
+//PROFILE MODULE
+//===========================================================//
+
+//profile view
+router.get('/profile', authController.auth,profileController.profile);
+
+//profile edit
+router.post('/profileedit/:_id', authController.auth,profileController.profileedit);
+
+//Pprofile update
+router.post('/profileupdate/:_id', authController.auth,profileController.profileupdate);
+
+//===========================================================//
+//CART MODULES
+//===========================================================//
+
+router.post('/addtocart/:_id', authController.auth,cartController.addtocart);
+
+//Whish List
+router.get('/addWishlist/:_id', authController.auth,cartController.addWishlist);
+router.get('/myWishlist', authController.auth,cartController.myWishlist);
+router.get('/removeWishItem/:_id', authController.auth,cartController.removeWishItem);
+
+//Cart
+router.get('/cart',authController.auth,cartController.cart);
+
+//Remove Item from Cart
+router.post('/removeItem/:_id',authController.auth,cartController.removeItem)
+
+//Cancel Item
+router.get('/cancelItem/:_id',authController.auth,cartController.cancelItem)
+
+//Return Item
+router.get('/returnItem/:_id',authController.auth,cartController.returnItem);
+
+//===========================================================//
+//COUPON MODULES
+//===========================================================//
+router.post('/removeCoupon/:_id',authController.auth,couponController.removeCoupon)
+
+//===========================================================//
+//WALLET MODULES
+//===========================================================//
+router.get('/myWallet',authController.auth,walletController.myWallet);
+
+
+
+module.exports = router;

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Login Form</title>
+   
+</head>
+<% if (locals.Message) { %>
+    <div style="color: green; background-color: #d4edda; padding: 10px; border: 1px solid #c3e6cb;">
+        <strong>Success:</strong> <%= Message %>
+    </div>
+    <!-- Add JavaScript or meta-refresh tag for automatic redirection -->
+    
+<% } %>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand" href="#">Admin Dashboard</a>
+
+      <button id="sidebarToggle" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav ml-auto">
+          <% if (locals.user) { %>
+            <li class="nav-item">
+              <a class="nav-link" href="/adminlogout">
+                <i class="fas fa-sign-out-alt"></i> Sign Out
+              </a>
+            </li>
+            <li class="nav-item">
+              <span class="nav-link">
+                <i class="fas fa-user"></i>
+                <%= user %>
+              </span>
+            </li>
+          <% } else { %>
+            <li class="nav-item">
+              <a class="nav-link" href="/adminlogin">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+              </a>
+            </li>
+          <% } %>
+        </ul>
+      </div>
+    </nav>
+  </header>
+    <div class="d-flex align-items-center" style="min-height: 100vh; background-color: #f8f9fa;">
+        <div class="container" style="width: 500px">
+             <div class="wrapper border border-primary p-3">
+                 <form action="/adminlogin" method="post" name="Login_Form" class="form-signin" >
+                 <h3 class="mb-3">Welcome! Please Sign In</h3>
+               
+                 <!-- Email input -->
+                 <div class="form-group">
+                   <label for="inputEmail" class="sr-only">Email Address</label>
+                   <input type="text" id="inputEmail" class="form-control" name="email" placeholder="Email Address" autofocus />
+                   <span id="inputEmailErrorMessage" style="color: red;"></span>
+                   <% if (locals.wrongEmail) { %>
+                    <span style="color: red;">
+                        <strong><%= wrongEmail %></strong>
+                    </span>
+                  <% } %> 
+                 </div>
+               
+                 <!-- Password input -->
+                 <div class="form-group">
+                   <label for="inputPassword" class="sr-only">Password</label>
+                   <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" />
+                   <span id="inputPasswordErrorMessage" style="color: red;"></span>
+                   <% if (locals.wrongPassword) { %>
+                    <span style="color: red;">
+                        <strong><%= wrongPassword %></strong>
+                    </span>
+                  <% } %> 
+                 </div>
+               
+                 <!-- Login button -->
+                 <button class="btn btn-lg btn-block" onclick="return validateForm()" style="background-color: rgb(23, 161,0); color: #f8f9fa;" name="Submit" value="Login" type="submit">Login</button>
+                 
+                 <div class="mt-3 text-center">
+                     <a href="/forgot" class="text-muted">Forgot Password?</a>
+                 </div>
+      
+                 <div class="mt-3 text-center">
+                     <span class="text-muted">Don't have an account? </span>
+                     <a href="/signup" class="text-primary">Sign Up</a>
+                 </div>
+             </form>
+         </div>
+      </div>
+      
+      <!-- Existing footer... -->
+      <footer class="footer fixed-bottom py-3 bg-dark text-white" style="margin-top: 10px;">
+        <div class="container text-center">
+          <p>Online Store Copyright</p>  
+        </div>
+      </footer>
+
+      <script>
+        function validateEmail(email) {
+          // Regular expression for a simple email validation
+          var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          return emailRegex.test(email);
+        }
+      
+        function validateForm() {
+          var emailInput = document.getElementById('inputEmail');
+          var passwordInput = document.getElementById('inputPassword');
+          
+          // Validate email
+          if (!emailInput.value.trim()) {
+            showErrorAlert('Email address is required.');
+            emailInput.focus();
+            return false; // Prevent form submission
+          } else if (!validateEmail(emailInput.value.trim())) {
+            showErrorAlert('Please enter a valid email address.');
+            emailInput.focus();
+            return false; // Prevent form submission
+          }
+      
+          // Validate password
+          if (!passwordInput.value.trim()) {
+            showErrorAlert('Password is required.');
+            passwordInput.focus();
+            return false; // Prevent form submission
+          }
+      
+          // Additional validation logic for the password if needed
+      
+          // Allow the form submission if all validations pass
+          return true;
+        }
+      
+        function showErrorAlert(message) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Please enter the details',
+            text: message,
+          });
+        }
+      </script>
+      
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

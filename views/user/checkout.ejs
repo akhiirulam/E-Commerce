@@ -1,0 +1,34 @@
+<!-- checkout.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Razorpay Checkout</title>
+</head>
+
+<body>
+    <h1>Razorpay Checkout Page</h1>
+    <p>Please complete the payment to proceed.</p>
+
+    <form id="paymentForm" action="/razorpayConfirm" method="POST">
+        <input type="hidden" name="orderId" value="<%= orderId %>">
+
+        <script src="https://checkout.razorpay.com/v1/checkout.js" data-key="<%= razorpay.key_id %>"
+            data-amount="<%= amount %>" data-currency="<%= currency %>" data-order_id="<%= orderId %>"
+            data-buttontext="Pay with Razorpay" data-name="Shoppy" data-description="Payment for your order"
+            data-image="https://your-company-logo-url.png" data-prefill.name="<%= prefill.name %>"
+            data-prefill.email="<%= prefill.email %>" data-theme.color="#F37254"></script>
+
+      
+    </form>
+
+    <!-- Optional: You can display some information to the user -->
+    <p>Total Amount: <%= amount/100 %>
+            <%= currency %>
+    </p>
+</body>
+
+</html>

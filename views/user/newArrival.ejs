@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>BookShoppy</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+  <style>
+    /* Custom Styles */
+
+    .navbar {
+    position: fixed;
+}
+    .navbar-brand img {
+      height: 20px; /* Set max height for the logo */
+    }
+
+    .navbar-nav.ml-auto .nav-link {
+      margin-right: 10px; /* Adjust spacing between menu items */
+    }
+
+  
+    .dropdown {
+    position: relative;
+    display: inline-block;
+    
+    }
+    .dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    width: fit-content;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 5px 16px;
+    z-index: 1;
+    }
+    .dropdown-item
+    {
+      color: #000000;
+      text-align: left;
+    }
+    .dropdown-menu :hover
+    {
+      background-color:aliceblue;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 56px; /* Height of the fixed navbar */
+      width: 250px;
+      bottom: 0;
+      left: 0;
+      z-index: 1000;
+      padding-top: 30px;
+      padding-left: 15px;
+      padding-right: 15px;
+      background-color: #343a40;
+      color: #fff;
+    }
+    .card
+    {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow */
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+    }
+
+    .search{
+       position: relative;
+       margin-top: 80px;
+       margin-left: 100px;
+       margin-right: auto;
+       width: 1000px;
+       box-shadow: 0 0 40px rgba(51, 51, 51, .1);
+         
+       }
+
+       .search input{
+
+        height: 60px;
+        text-indent: 25px;
+        border: 2px solid #d6d4d4;
+
+
+       }
+
+       .nav ul
+       {
+        list-style-type: none;
+       }
+       .search input:focus{
+
+        box-shadow: none;
+        border: 2px solid blue;
+
+
+       }
+
+       .search .fa-search{
+
+        position: absolute;
+        top: 20px;
+        left: 16px;
+
+       }
+
+       .search button{
+
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        height: 50px;
+        width: 110px;
+        background: rgb(0, 119, 255);
+
+       }
+  .footer {
+    margin-bottom: 0;
+  }
+
+
+
+    /* Responsive Styles */
+    @media (max-width: 767px) {
+      body {
+        padding-top: 70px; /* Adjusted padding for fixed-top navbar on smaller screens */
+      }
+
+      .navbar-brand img {
+        max-height: 30px; /* Adjust logo size for smaller screens */
+      }
+
+      .navbar-nav.ml-auto .nav-link {
+        margin-right: 0; /* Reset margin for better spacing */
+      }
+
+      .carousel-caption {
+        position: static;
+        transform: none;
+      }
+
+      .carousel-caption h5 {
+        font-size: 2rem;
+      }
+
+      .carousel-caption p {
+        font-size: 1.2rem;
+      }
+      .card-header {
+        font-size: 1.2rem;
+      }
+
+      .card-footer {
+        font-size: 0.9rem;
+      }
+
+      .footer {
+      text-align: center;
+    }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
+    <div class="container" id="myNavbar">
+      <a class="navbar-brand" href="#"><img src="/images/Logo.png" alt="BookShoppy Logo"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item active"><a class="nav-link" href="/home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Deals</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Stores</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+          <% if (locals.user) { %>
+            <div class="dropdown">
+              <i class="fas fa-user" style="color: aliceblue;"></i> &nbsp;
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-expanded="false">
+                <%= user %>
+              </button>
+              
+              <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+               
+                <li><a class="dropdown-item" href="/profile"><i class="fa fa-user"></i>&nbsp;My Profile</a></li>
+                <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt"></i>&nbsp; Sign Out</a></li>
+              </ul>
+            </div>
+          <% } 
+          else{ %>
+            <li class="nav-item"><a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i> Sign In</a></li>
+          <% } %>
+          <li class="nav-item"><a class="nav-link" href="/cart"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+        </ul>
+        
+      </div>
+    </div>
+  </nav>
+<!--Navbar End-->
+
+
+<!--Side Bar-->
+<div class="sidebar">
+  <h5>Filters</h5>
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <h6>Category</h6>
+      <a class="nav-link" href="/poemOnly">
+        <i class='fas fa-book-open'></i> Poem
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/storyOnly">
+        <i class='fas fa-book-open'></i> Story
+      </a>
+    </li>
+    <!-- Add more sidebar items as needed -->
+    <li class="nav-item">
+      <a class="nav-link" href="/price100to500">
+        <i class='fas fa-book-open'></i> Price: 100 to 500
+      </a>
+    </li>
+    
+    <ul>
+      <li class="nav-item">
+          <h6>Sorting</h6>
+          <label class="nav-link filter-checkbox">
+            <input type="radio" name="Selection" onclick="redirectToYearPage()"> Book Name<br>
+          </label>
+         
+      </li>
+      <li class="nav-item">
+          <label class="nav-link filter-checkbox">
+            <input type="radio" name="Selection" onclick="redirectToPricePage()"> Low to High Price<br>
+          </label>
+          
+      </li>
+      <li class="nav-item">
+          <label class="nav-link filter-checkbox">
+              <input type="radio" id="bestSellerYearCheckbox" onclick="redirectToHighPricePage()"> High to Low Price
+          </label>
+      </li>
+      <li class="nav-item">
+          <label class="nav-link filter-checkbox">
+              <input type="checkbox" id="bestSellerMonthCheckbox"> Best seller - Month
+          </label>
+      </li>
+
+      <script>
+        function redirectToYearPage() {
+          window.location.href = '/yearWise'; // Change '/year' to the desired URL
+        }
+        function redirectToPricePage() {
+          window.location.href = '/priceWise'; // Change '/year' to the desired URL
+        }
+        function redirectToHighPricePage() {
+          window.location.href = '/highPriceWise'; // Change '/year' to the desired URL
+        }
+      </script>
+  </ul>
+  </ul>
+</div>
+<script>
+  function checkFluency() {
+    var radio = document.getElementById('newYearCheckbox');
+    if (!radio.checked) {
+      alert("You need to be fluent in English to apply for the job");
+    }
+  }
+</script>
+
+<!--Side Bar End-->
+<div class="row height d-flex justify-content-center align-items-center">
+  <div class="col-md-8">
+    <div class="search">
+      <i class="fa fa-search"></i>
+      <form action="/bookSearch" method="post">
+        <input type="text" name="searchText" class="form-control" placeholder="Search Your favorite book">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>    
+    </div>
+  </div>
+  
+</div>
+<!--Main Content-->
+
+<% bookViews.forEach((book, index) => { %>
+   <div class="container py-3" style="margin-bottom: 30px; margin-top: 5px;">
+    <div class="row justify-content-center">
+      <div class="col-md-10 col-xl-12">
+        <div class="card-deck" >
+        <div class="card shadow-0 border rounded-3" style="margin-left: 250px; margin-right: 50px; ">
+            <div class="card-body">
+            <div class="row">
+              <div class="col-md-12 col-lg-3 col-xl-3 ">
+                <div class="bg-image hover-zoom ripple rounded ripple-surface">
+                  
+                  <% if (book.images && Array.isArray(book.images)) { %>
+                    <div class="text-center mt-3">
+                      <% book.images.slice(0, 1).forEach(image => { %>
+                        <img src="data:image/<%= image.contentType %>;base64, <%= image.data.toString('base64') %>" alt="Product Image" class="card-img-top" style="height: 250px; width: 150px;">
+                      <% }); %>
+                    </div>
+                  <% } %>
+                  <a href="#!">
+                    <div class="hover-overlay">
+                      <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-6 col-xl-6">
+                
+                <h5><%= book.bookName %></h5>
+               
+                <div class="d-flex flex-row">
+                  <div class="text-danger mb-1 me-2">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                  </div>
+                  <span>310</span>
+                </div>
+                <div class="mt-1 mb-0 text-muted small">
+                  <strong><span>Written by: <%= book.author %></span></strong>
+                </div>
+                <div class="mb-2 text-muted small">
+                  <span><%= book.publisher %></span>
+                  <span class="text-primary"> • </span>
+                  <% if (book.genres && book.genres.category ) { %>
+                    <span><%= book.genres && book.genres.category ? book.genres.category : 'N/A' %></span>
+                  <% } else if( book.genresInfo && book.genresInfo.category) { %>
+                    <span><%= book.genresInfo && book.genresInfo.category ? book.genresInfo.category : 'N/A' %></span>
+                  <% } %>
+                  
+                  <span class="text-primary"> • </span>
+                  <span><%= book.year %></span>
+                </div>
+                <p class="text mb-4 mb-md-0">
+                  <%= book.bookDetail %>
+                </p>
+              </div>
+              <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
+                <div class="d-flex flex-row align-items-center mb-1">
+                  <h4 class="mb-1 me-1">₹<%= book.price %></h4>
+                  <span class="text-danger"><s> ₹ 2400</s></span>
+                </div>
+                <h6 class="text-success">Free shipping</h6>
+                <div class="d-flex flex-column mt-4">
+           
+                  <a href="/bookdetails/<%= book._id %>" class="btn btn-primary btn-sm" role="button">View Details</a>
+                  <button class="btn btn-outline-primary btn-sm mt-2" type="button">
+                    Add to wishlist
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> 
+
+<% }); %>
+
+
+<!--Main Content End-->
+<div style="margin-top: 30px; margin-left: 200px; text-align: center; position: fixed; bottom: 50px; width: 60%; background-color: #f8f9fa; padding: 10px;">
+  <% if (paginationInfo.hasPrevPage) { %>
+    <a href="?page=<%= paginationInfo.currentPage - 1 %>">Previous</a>
+  <% } %>
+
+  Page <%= paginationInfo.currentPage %> of <%= paginationInfo.totalPages %>
+
+  <% if (paginationInfo.hasNextPage) { %>
+    <a href="?page=<%= paginationInfo.currentPage + 1 %>">Next</a>
+  <% } %>
+</div>
+
+<!-- Footer Begins -->
+<footer class="footer mt-auto fixed-bottom py-2 bg-dark text-white">
+  <div class="container text-center">
+    <p>Online Store Copyright</p>  
+  </div>
+</footer>
+<!--Footer End-->
+
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
